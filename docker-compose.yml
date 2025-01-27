@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  app:
+    image: malekkkk/myapp:latest # Use your Docker Hub image
+    ports:
+      - "8080:8080" # Expose the app on the public IP
+    depends_on:
+      - postgres
+    networks:
+      - spring-network
+
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    ports:
+      - "5432:5432" # Expose PostgreSQL for external access if needed
+    environment:
+      POSTGRES_DB: DWash
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./all_table_structure.sql:/docker-entrypoint-initdb.d/all_table_structure.sql
+    networks:
+      - spring-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "5050:80" # Expose pgAdmin for external access
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      - spring-network
+
+networks:
+  spring-network:
+
+volumes:
+  postgres-data:
