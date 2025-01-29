@@ -1,5 +1,14 @@
 version: '3.8'
 services:
+  frontend:
+    image: malekkkk/next-app:latest # Use your Docker Hub image
+    ports:
+      - "3000:3000" # Expose Next.js app on port 3000
+    depends_on:
+      - postgres
+    networks:
+      - spring-network
+
   app:
     image: malekkkk/myapp:latest # Use your Docker Hub image
     ports:
